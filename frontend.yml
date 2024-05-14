@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+   
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+     
+  template:
+    metadata:
+      labels:
+        app: frontend
+       
+    spec:
+      containers:
+        - name: frontend-container
+          image: rosinebelle/frontendthunder:V.1.0.1
+          ports:
+            - containerPort: 5000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 32443
+  type: NodePort

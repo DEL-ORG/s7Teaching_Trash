@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      
+  template:
+    metadata:
+      labels:
+        app: backend
+        
+    spec:
+      containers:
+        - name: backend
+          image: rosinebelle/backendthunder:v1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+            
+          env:
+            - name: DB
+              value: endgame
+            - name: DB_HOST
+              value: db
+            - name: DB_PASS
+              value: example
+            - name: DB_USER
+              value: john 
+---              
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+    type: ClusterIP
